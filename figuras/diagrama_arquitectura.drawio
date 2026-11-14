@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Página-1" id="X095IjqC3cjY-BGV509b">
+    <mxGraphModel dx="1493" dy="864" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;" value="" vertex="1">
+          <mxGeometry height="620" width="960" x="40" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-41" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="N-c-3SJSqPy-bYsGvBhw-48" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-42" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="N-c-3SJSqPy-bYsGvBhw-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-43" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="N-c-3SJSqPy-bYsGvBhw-54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-44" connectable="0" parent="N-c-3SJSqPy-bYsGvBhw-43" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="comandos&amp;nbsp; RESP/TCP :6379" vertex="1">
+          <mxGeometry relative="1" x="-0.8997" y="-1" as="geometry">
+            <mxPoint x="21" y="9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-45" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="Cliente&lt;br&gt;redis-cli -c (modo clúster)" vertex="1">
+          <mxGeometry height="60" width="200" x="415" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-46" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="N-c-3SJSqPy-bYsGvBhw-56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-47" connectable="0" parent="N-c-3SJSqPy-bYsGvBhw-46" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="replicación asíncrona" vertex="1">
+          <mxGeometry relative="1" x="0.0359" y="-3" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-62" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;labelPadding=0 4;flowAnimation=1;startArrow=none;startFill=0;endArrow=none;endFill=0;" target="N-c-3SJSqPy-bYsGvBhw-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-65" connectable="0" parent="N-c-3SJSqPy-bYsGvBhw-62" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="bus :16379" vertex="1">
+          <mxGeometry relative="1" x="0.0333" y="2" as="geometry">
+            <mxPoint x="-2" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-48" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="Maestro B&lt;div&gt;redis-2 172.30.0.12&lt;/div&gt;&lt;div&gt;slots 5461-10922&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="415" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-49" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="N-c-3SJSqPy-bYsGvBhw-57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-50" connectable="0" parent="N-c-3SJSqPy-bYsGvBhw-49" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="replicación asíncrona" vertex="1">
+          <mxGeometry relative="1" x="0.0198" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-67" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;labelPadding=0 4;flowAnimation=1;" target="N-c-3SJSqPy-bYsGvBhw-45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-68" connectable="0" parent="N-c-3SJSqPy-bYsGvBhw-67" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="MOVED: redirige al nodo dueño del slot" vertex="1">
+          <mxGeometry relative="1" x="0.1565" y="-2" as="geometry">
+            <mxPoint x="-24" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-51" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="&lt;div&gt;Maestro C&lt;/div&gt;&lt;div&gt;redis-3 172.30.0.13&lt;/div&gt;&lt;div&gt;slots 10923 - 16383&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="735" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-52" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="N-c-3SJSqPy-bYsGvBhw-55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-53" connectable="0" parent="N-c-3SJSqPy-bYsGvBhw-52" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="replicación asíncrona" vertex="1">
+          <mxGeometry relative="1" x="-0.0444" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-61" edge="1" parent="1" source="N-c-3SJSqPy-bYsGvBhw-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;labelPadding=0 4;flowAnimation=1;startArrow=none;startFill=0;strokeColor=default;endArrow=none;endFill=0;" target="N-c-3SJSqPy-bYsGvBhw-48">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-64" connectable="0" parent="N-c-3SJSqPy-bYsGvBhw-61" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="bus :16379" vertex="1">
+          <mxGeometry relative="1" x="-0.0167" y="2" as="geometry">
+            <mxPoint x="1" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-54" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="&lt;div&gt;Maestro A&lt;/div&gt;&lt;div&gt;redis-1 172.30.0.11&lt;/div&gt;&lt;div&gt;slots 0 - 5460&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="95" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-55" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="&lt;div&gt;Réplica A&lt;/div&gt;&lt;div&gt;redis-5 172.30.0.15&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="150" x="120" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-56" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="&lt;div&gt;Réplica B&lt;/div&gt;&lt;div&gt;redis-6 172.30.0.16&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="150" x="440" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-57" parent="1" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;" value="&lt;div&gt;Réplica C&lt;/div&gt;&lt;div&gt;redis-4 172.30.0.14&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="150" x="760" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-59" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="RED DOCKER «redisnet» - 172.30.0.0/16" vertex="1">
+          <mxGeometry height="30" width="270" x="70" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-66" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;" value="Bus del clúster (puerto 16379): los 6 nodos se intercambian ping/pong (gossip). Si un maestro no responde durante cluster-node-timeout, la mayoría de maestros lo marca como caído y su réplica es promovida a maestro." vertex="1">
+          <mxGeometry height="60" width="840" x="95" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-69" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=20;" value="&lt;div&gt;Distribución de claves: slot = CRC16(clave) mod 16384&lt;/div&gt;&lt;div&gt;Ejemplo real: usuario:25 → slot 7554 → Maestro B (172.30.0.12)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="510" x="40" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="N-c-3SJSqPy-bYsGvBhw-70" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=20;" value="&lt;div&gt;Leyenda&lt;/div&gt;&lt;div&gt;- Maestro: atiende lecturas y escrituras de sus slots&lt;/div&gt;&lt;div&gt;- Réplica: copia del maestro; lo reemplaza si cae&lt;/div&gt;&lt;div&gt;──► Petición del cliente / ──► replicación&lt;/div&gt;&lt;div&gt;- - ► Redirección MOVED&lt;/div&gt;&lt;div&gt;- - - Bus del clúster (gossip)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="360" x="640" y="650" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
