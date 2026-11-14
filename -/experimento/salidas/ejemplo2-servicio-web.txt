@@ -1,0 +1,104 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261114094005
+Nombre de usuario: PC-DARWIN\djsan
+Usuario RunAs: PC-DARWIN\djsan
+Nombre de la configuración: 
+Máquina: PC-DARWIN (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 14136
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es -\experimento\salidas\ejemplo2-servicio-web.txt
+djsan@PC-DARWIN [14/11/2026 09:40:05] >
+PS>Resolve-DnsName www.uteq.edu.ec
+
+Name                                           Type   TTL   Section    IPAddress
+----                                           ----   ---   -------    ---------
+www.uteq.edu.ec                                A      2529  Answer     190.15.141.211
+
+
+djsan@PC-DARWIN [14/11/2026 09:40:16] >
+PS>$r = Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsing; $r.StatusCode
+200
+djsan@PC-DARWIN [14/11/2026 09:40:25] >
+PS>Measure-Command { Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsing | Out-Null } | Select-Object TotalMilliseconds
+
+TotalMilliseconds
+-----------------
+         440,8525
+
+
+djsan@PC-DARWIN [14/11/2026 09:40:36] >
+PS>Resolve-DnsName www.uteq.edu.ec
+Resolve-DnsName : www.uteq.edu.ec : Se devolvió esta operación porque se agotó el tiempo de espera
+En línea: 1 Carácter: 1
++ Resolve-DnsName www.uteq.edu.ec
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationTimeout: (www.uteq.edu.ec:String) [Resolve-DnsName], Win32Exception
+    + FullyQualifiedErrorId : ERROR_TIMEOUT,Microsoft.DnsClient.Commands.ResolveDnsName
+Resolve-DnsName : www.uteq.edu.ec : Se devolvió esta operación porque se agotó el tiempo de espera
+En línea: 1 Carácter: 1
++ Resolve-DnsName www.uteq.edu.ec
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationTimeout: (www.uteq.edu.ec:String) [Resolve-DnsName], Win32Exception
+    + FullyQualifiedErrorId : ERROR_TIMEOUT,Microsoft.DnsClient.Commands.ResolveDnsName
+
+djsan@PC-DARWIN [14/11/2026 09:41:25] >
+PS>$r = Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsing; $r.StatusCode
+>> ErrorTerminación(Invoke-WebRequest): "No es posible conectar con el servidor remoto"
+Invoke-WebRequest : No es posible conectar con el servidor remoto
+En línea: 1 Carácter: 6
++ $r = Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsing; $r.S ...
++      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], 
+WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+Invoke-WebRequest : No es posible conectar con el servidor remoto
+En línea: 1 Carácter: 6
++ $r = Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsing; $r.S ...
++      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+200
+djsan@PC-DARWIN [14/11/2026 09:41:55] >
+djsan@PC-DARWIN [14/11/2026 09:41:55] >
+PS>Measure-Command { Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsing | Out-Null } | Select-Object TotalMilliseconds
+>> ErrorTerminación(Invoke-WebRequest): "No se puede resolver el nombre remoto: 'www.uteq.edu.ec'"
+Invoke-WebRequest : No se puede resolver el nombre remoto: 'www.uteq.edu.ec'
+En línea: 1 Carácter: 19
++ ... e-Command { Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsin ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], 
+WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+Invoke-WebRequest : No se puede resolver el nombre remoto: 'www.uteq.edu.ec'
+En línea: 1 Carácter: 19
++ ... e-Command { Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsin ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+
+TotalMilliseconds
+-----------------
+          77,7899
+
+
+djsan@PC-DARWIN [14/11/2026 09:42:07] >
+PS>$r = Invoke-WebRequest https://www.uteq.edu.ec -UseBasicParsing; $r.StatusCode
+200
+djsan@PC-DARWIN [14/11/2026 09:43:51] >
+PS>Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261114094421
+**********************
