@@ -62,7 +62,7 @@
 
 ## 13/11/2026 — Sesión 3
 
-**Horario:** 21:04 – 21:30
+**Horario:** 21:04 – 21:32
 
 **Qué hice**
 - Instalé Docker Desktop con WSL 2.
@@ -74,3 +74,21 @@
 - `wsl --status` decía que la virtualización no estaba habilitada, aunque en el Administrador de tareas aparecía como habilitada. Faltaba activar la "Plataforma de máquina virtual" con `wsl.exe --install --no-distribution` y reiniciar.
 
 **Tiempo dedicado:** aprox. 0 h 26 min
+
+---
+
+## 13/11/2026 — Sesión 4
+
+**Horario:** 23:14 – 23:52
+
+**Qué hice**
+- Realicé el experimento E1 de tolerancia a fallos: apagué el maestro redis-2 (172.30.0.12), que guardaba la clave `usuario:25`, y medí cuánto tardaba su réplica redis-6 en reemplazarlo.
+- El failover tardó 7.8 segundos. Entre los 6.2 y 7.1 s el clúster estuvo en estado `fail`, y después redis-6 quedó como maestro de los slots 5461–10922.
+- Comprobé que `usuario:25` seguía disponible después del failover.
+- Volví a encender redis-2 y verifiqué que regresó como réplica del nuevo maestro.
+- Grabé la sesión con `Start-Transcript` y documenté el experimento en `experimento/02-e1-failover.md`.
+
+**Problemas encontrados y cómo los resolví**
+- guardé las capturas del experimento con nombres equivocados y tuve que revisarlas y renombrarlas
+
+**Tiempo dedicado:** aprox. 0 h 38 min
