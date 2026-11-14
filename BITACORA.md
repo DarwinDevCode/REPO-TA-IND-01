@@ -92,3 +92,56 @@
 - guardé las capturas del experimento con nombres equivocados y tuve que revisarlas y renombrarlas
 
 **Tiempo dedicado:** aprox. 0 h 38 min
+
+---
+
+## 14/11/2026 — Sesión 5
+
+**Horario:** 00:00 (aprox.) – 00:58
+
+**Qué hice**
+- Construí en draw.io el diagrama final de la arquitectura de Redis Cluster, partiendo de mi esquema a mano (Anexo A) y usando como referencia visual un diagrama generado con Claude.
+- Incluí la red `redisnet`, los seis nodos con sus contenedores e IPs reales, los rangos de slots, la asignación real de réplicas, los puertos 6379 y 16379, la replicación asíncrona y la redirección MOVED.
+- Guardé el archivo fuente `figuras/diagrama_arquitectura.drawio` y lo exporté a PDF recortado para el informe.
+- Revisé qué páginas de los artículos de la bibliografía tenían información útil para las lecturas del Anexo B.
+
+**Problemas encontrados y cómo los resolví**
+- No sabía cómo guardar el archivo fuente ni exportarlo sin márgenes; lo guardé como `.drawio` y lo exporté a PDF con la opción Recortar.
+
+**Tiempo dedicado:** aprox. 0 h 58 min
+
+## 14/11/2026 — Sesión 6
+
+**Horario:** 07:39 – 10:00 (aprox.)
+
+**Qué hice**
+- Leí los artículos de Ahmed et al. (2023), Ferreira et al. (2024) y Gencer et al. (2021), subrayé las partes útiles y tomé 4 capturas con el número de página visible (Anexo B).
+- Encontré que Ahmed et al. clasifican a Redis como sistema CP, lo que no coincide con lo que observé en mi experimento E1; lo usé en la postura crítica.
+- Creé `informe/main.tex` con la estructura completa del informe y, con apoyo de Claude, redacté la introducción, la arquitectura, el análisis de la Unidad 1, la experimentación, la evolución del diseño y la postura crítica.
+- Completé en la carátula los datos del docente y del paralelo, y configuré los enlaces en azul.
+- Realicé dos ejemplos de mi propio entorno: un conflicto entre réplicas en Git/GitHub (push rechazado, conflicto en `README.md` y merge) y el acceso al sitio web de la UTEQ con y sin red, grabado con `Start-Transcript`.
+- Redacté la comparación con Hazelcast a partir de su documentación oficial.
+
+**Problemas encontrados y cómo los resolví**
+- La primera captura de la pág. 3112 no mostraba el número de página y en la de la pág. 172 faltaba la línea donde Redis aparece como CP; repetí ambas.
+- Intercambié los nombres de las dos capturas de Gencer y una quedó con extensión duplicada (`.png.png`); las renombré.
+- Escribí mal `Start-Transcript` y usé `-\` en lugar de `.\` en la ruta del archivo de salida.
+- Sin red, la consola mostró un `200` que en realidad era la respuesta anterior guardada en la variable `$r`; lo documenté como un ejemplo de dato desactualizado.
+- En un commit copié la palabra "Summary:" dentro del mensaje.
+
+**Tiempo dedicado:** aprox. 2 h 21 min
+
+## 14/11/2026 — Sesión 7
+
+**Horario:** 12:53 – 13:45 (aprox.)
+
+**Qué hice**
+- Subí las capturas de los ejemplos de mi entorno, la transcripción y los cambios del informe.
+- Redacté, con apoyo de Claude, el resumen (192 palabras) y las conclusiones, y actualicé la declaración de uso de inteligencia artificial.
+- Completé el `README.md` con el enlace al video, las instrucciones de compilación y la estructura del repositorio.
+- Preparé en LaTeX la carátula de una página para el SGA con la URL del repositorio.
+
+**Problemas encontrados y cómo los resolví**
+- El README no tenía todo lo que pide la actividad (enlace al video, compilador, archivo principal y dependencias); lo completé.
+
+**Tiempo dedicado:** aprox. 0 h 52 min
