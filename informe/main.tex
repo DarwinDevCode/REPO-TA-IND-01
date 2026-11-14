@@ -83,7 +83,9 @@
 
 % ---------------------------- Resumen ----------------------------
 \begin{abstract}
-PENDIENTE
+Este informe analiza Redis Cluster como sistema distribuido a partir de los conceptos de la Unidad~1 de Aplicaciones Distribuidas y lo compara con Hazelcast. Se desplegó con Docker un clúster de seis nodos Redis 8, con tres maestros y tres réplicas, y se provocó la caída de un nodo maestro: el clúster detectó el fallo y promovió a su réplica en 7.8 segundos, conservó el dato almacenado y pasó brevemente por un estado de fallo global. El análisis muestra que Redis Cluster ofrece transparencias de distribución parciales, combina la comunicación petición–respuesta con los clientes y el gossip entre nodos, y se comporta como un sistema PA/EL, porque su replicación asíncrona puede perder escrituras ya confirmadas; por ello se cuestiona su clasificación como sistema CP en la literatura. Dos ejemplos del entorno propio, un conflicto entre réplicas en Git y el acceso al sitio web de la UTEQ sin red, ilustran los mismos compromisos. La comparación documental indica que Hazelcast favorece la durabilidad con copias de respaldo síncronas y ofrece consistencia fuerte opcional con Raft. Se concluye que Redis Cluster es adecuado para datos rápidos y reconstruibles, pero no para datos críticos.
+
+\noindent\textbf{Palabras clave:} Redis Cluster, Hazelcast, sistemas distribuidos, CAP, PACELC, tolerancia a fallos, replicación.
 \end{abstract}
 
 \tableofcontents
@@ -997,7 +999,69 @@ datos que el sistema nunca prometió evitar.
 \label{sec:conclusiones}
 % =====================================================================
 
-PENDIENTE
+El análisis de Redis Cluster con los conceptos de la Unidad~1, el
+despliegue de un clúster real y la comparación con Hazelcast permiten
+extraer las siguientes conclusiones:
+
+\begin{enumerate}
+  \item \textbf{Redis Cluster reparte la responsabilidad entre servidor y
+  cliente.} El reparto de las claves en 16\,384 \emph{hash slots} y la
+  ausencia de un coordinador central le dan escalabilidad y baja latencia,
+  pero sus transparencias de distribución son parciales: el cliente debe
+  seguir las redirecciones \texttt{MOVED}/\texttt{ASK} y agrupar las claves
+  relacionadas en el mismo slot. En el clúster desplegado, las dos claves de
+  prueba se almacenaron en nodos distintos al que recibió la petición, y la
+  redirección fue visible para el usuario.
+
+  \item \textbf{Redis Cluster es un sistema PA/EL.} Su replicación asíncrona
+  confirma las escrituras antes de copiarlas a las réplicas, por lo que
+  prioriza la latencia en funcionamiento normal y la disponibilidad durante
+  una partición, a costa de poder perder escrituras confirmadas. El comando
+  \texttt{WAIT} reduce ese riesgo, pero no ofrece consistencia fuerte y tiene
+  un coste alto de rendimiento. Por ello no se comparte la clasificación de
+  Redis como sistema CP que propone parte de la literatura.
+
+  \item \textbf{La tolerancia a fallos es automática, pero no instantánea ni
+  completa.} En el experimento E1 el clúster detectó la caída del maestro,
+  promovió a su réplica en 7.8\,s y reincorporó al nodo antiguo como réplica,
+  sin perder el dato almacenado. Sin embargo, existió una ventana en la que
+  parte de las claves no estaba disponible y un breve estado de fallo
+  global. Además, el incidente de ChatGPT de 2023 muestra que fallos fuera
+  del servidor, como un error en la biblioteca cliente, quedan fuera de los
+  mecanismos de Redis Cluster.
+
+  \item \textbf{Los mismos compromisos aparecen en el entorno cotidiano.}
+  En Git/GitHub, dos réplicas que aceptan cambios sin coordinarse terminaron
+  en un conflicto, que se resolvió a mano en lugar de descartar un cambio,
+  como haría Redis. En el acceso al sitio web de la UTEQ, la comunicación
+  síncrona dejó al cliente sin respuesta al perder la red, y la consola
+  mostró un resultado anterior que ya no era válido.
+
+  \item \textbf{Hazelcast resuelve el mismo problema con otras prioridades.}
+  Según la comparación documental, Hazelcast espera por defecto la
+  confirmación de una copia de respaldo síncrona, lo que mejora la
+  durabilidad a cambio de latencia (PA/EC), y ofrece consistencia fuerte con
+  Raft en su CP Subsystem, aunque en la versión 5.5 esta función requiere la
+  edición Enterprise. Ambos sistemas siguen siendo AP en sus estructuras
+  principales.
+
+  \item \textbf{La elección depende del tipo de dato.} Redis Cluster es una
+  buena opción para datos rápidos y reconstruibles, como cachés, sesiones o
+  contadores, mientras que para datos que no se pueden perder se necesita un
+  sistema con consistencia fuerte. Las clasificaciones CAP y PACELC son
+  útiles para razonar, pero deben contrastarse con la documentación, la
+  configuración y, cuando es posible, con experimentos propios.
+\end{enumerate}
+
+\textbf{Limitaciones y trabajo futuro.} El experimento E1 se ejecutó una sola
+vez, con todos los nodos en el mismo equipo y sin medir las peticiones de un
+cliente durante la ventana de fallo. Tampoco se simuló una partición de red
+ni se desplegó Hazelcast. Como trabajo futuro se propone repetir el
+experimento varias veces, aislar un maestro de la red (por ejemplo, con
+\texttt{docker network disconnect}) para observar la pérdida de escrituras
+durante una partición, y desplegar un clúster Hazelcast con la misma prueba
+para comparar ambos sistemas con datos propios.
+
 
 % =====================================================================
 \section*{Declaración de uso de inteligencia artificial}
@@ -1031,7 +1095,8 @@ siguientes tareas:
   \item \textbf{Redacción:} apoyo en la documentación del experimento E1 y su
   interpretación, y en la redacción de la introducción, la arquitectura, el
   análisis de la Unidad~1, la experimentación, los ejemplos de mi propio
-  entorno, la comparación con Hazelcast y la postura crítica de este informe.
+  entorno, la comparación con Hazelcast, la postura crítica, el resumen y
+  las conclusiones de este informe.
 \end{itemize}
 
 Todo el contenido fue revisado por el autor, quien asume la responsabilidad
