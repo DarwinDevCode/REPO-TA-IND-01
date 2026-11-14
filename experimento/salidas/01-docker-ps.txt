@@ -1,0 +1,7 @@
+﻿CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS      NAMES
+7305a5950773   redis:8   "docker-entrypoint.sÔÇª"   20 minutes ago   Up 20 minutes   6379/tcp   redis-6
+9415df909cc3   redis:8   "docker-entrypoint.sÔÇª"   20 minutes ago   Up 20 minutes   6379/tcp   redis-5
+054bc7e5b824   redis:8   "docker-entrypoint.sÔÇª"   20 minutes ago   Up 20 minutes   6379/tcp   redis-4
+92d5f2b82159   redis:8   "docker-entrypoint.sÔÇª"   20 minutes ago   Up 20 minutes   6379/tcp   redis-3
+7e8e0e6dfe81   redis:8   "docker-entrypoint.sÔÇª"   20 minutes ago   Up 20 minutes   6379/tcp   redis-2
+fb8a255aa47a   redis:8   "docker-entrypoint.sÔÇª"   20 minutes ago   Up 20 minutes   6379/tcp   redis-1
