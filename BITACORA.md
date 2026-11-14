@@ -57,3 +57,20 @@
 - Estuve a punto de subir la foto del esquema sin mi nombre y la fecha, que son obligatorios. Los agregué en la hoja antes de subirla.
 
 **Tiempo dedicado:** aprox. 1 h 23 min
+
+---
+
+## 13/11/2026 — Sesión 3
+
+**Horario:** 21:04 – 21:30
+
+**Qué hice**
+- Instalé Docker Desktop con WSL 2.
+- Levanté un clúster Redis de 6 nodos (3 maestros y 3 réplicas) con Docker y tomé 4 capturas: contenedores activos, creación del clúster, estado de los nodos y escritura/lectura con redirección entre nodos.
+- Guardé los comandos y las salidas en la carpeta `experimento/`.
+
+**Problemas encontrados y cómo los resolví**
+- Docker no estaba instalado y WSL estaba dañado (error `Wsl/CallMsi/Install/REGDB_E_CLASSNOTREG`). Dejé que WSL se reparara solo y reinicié el equipo.
+- `wsl --status` decía que la virtualización no estaba habilitada, aunque en el Administrador de tareas aparecía como habilitada. Faltaba activar la "Plataforma de máquina virtual" con `wsl.exe --install --no-distribution` y reiniciar.
+
+**Tiempo dedicado:** aprox. 0 h 26 min
