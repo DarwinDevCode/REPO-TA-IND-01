@@ -1,0 +1,87 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261113231516
+Nombre de usuario: PC-DARWIN\djsan
+Usuario RunAs: PC-DARWIN\djsan
+Nombre de la configuración: 
+Máquina: PC-DARWIN (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Id. de proceso: 8648
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+La transcripción ha comenzado. El archivo de salida es experimento\salidas\e1-failover.txt
+djsan@PC-DARWIN [13/11/2026 23:15:16] >
+PS>docker exec redis-1 redis-cli cluster nodes
+c06efe7b2c22b154ff40b066fa2e3ab339e832be 172.30.0.15:6379@16379 slave 4c4df7f3191d48bf20660691e0c89a
+accf6458f0 0 1794629743409 1 connected
+c4275fed52f21473533b68579d13cfc9a6ca3105 172.30.0.12:6379@16379 master - 0 1794629742404 2 connected
+ 5461-10922
+1689d691261cce1b08685e4b9a031ea481289e87 172.30.0.16:6379@16379 slave c4275fed52f21473533b68579d13cf
+c9a6ca3105 0 1794629742000 2 connected
+38fe79c424a135a061290d5cd9ed389cbcc18609 172.30.0.13:6379@16379 master - 0 1794629742907 3 connected
+ 10923-16383
+4c4df7f3191d48bf20660691e0c89aaccf6458f0 172.30.0.11:6379@16379 myself,master - 0 0 1 connected 0-54
+60
+1a83930b60f85e9c2d5810417a44e38225d3c8f0 172.30.0.14:6379@16379 slave 38fe79c424a135a061290d5cd9ed38
+9cbcc18609 0 1794629741900 3 connected
+djsan@PC-DARWIN [13/11/2026 23:15:44] >
+PS>docker exec redis-1 redis-cli -c GET usuario:25
+Darwin Sanchez
+djsan@PC-DARWIN [13/11/2026 23:15:59] >
+PS>docker stop redis-2
+redis-2
+djsan@PC-DARWIN [13/11/2026 23:17:42] >
+PS>$t0 = Get-Date
+djsan@PC-DARWIN [13/11/2026 23:17:42] >
+PS>do {
+  Start-Sleep -Milliseconds 500
+  $seg = [math]::Round(((Get-Date) - $t0).TotalSeconds, 1)
+  $estado = (docker exec redis-1 redis-cli cluster info | Select-String "cluster_state").ToString().Trim()
+  $nodo16 = (docker exec redis-1 redis-cli cluster nodes | Select-String "172.30.0.16").ToString()
+  $rol16 = if ($nodo16 -match " master ") { "MASTER" } else { "replica" }
+  Write-Host "$seg s | $estado | redis-6: $rol16"
+} until ($rol16 -eq "MASTER")
+0.6 s | cluster_state:ok | redis-6: replica
+1.4 s | cluster_state:ok | redis-6: replica
+2.2 s | cluster_state:ok | redis-6: replica
+3 s | cluster_state:ok | redis-6: replica
+3.8 s | cluster_state:ok | redis-6: replica
+4.6 s | cluster_state:ok | redis-6: replica
+5.5 s | cluster_state:ok | redis-6: replica
+6.2 s | cluster_state:fail | redis-6: replica
+7.1 s | cluster_state:fail | redis-6: replica
+7.8 s | cluster_state:ok | redis-6: MASTER
+djsan@PC-DARWIN [13/11/2026 23:17:50] >
+PS>Write-Host "Failover completado en $seg segundos"
+Failover completado en 7.8 segundos
+djsan@PC-DARWIN [13/11/2026 23:19:33] >
+PS>docker exec redis-1 redis-cli cluster nodes
+1689d691261cce1b08685e4b9a031ea481289e87 172.30.0.16:6379@16379 master - 0 1794629989545 7 connected 5461-10922
+38fe79c424a135a061290d5cd9ed389cbcc18609 172.30.0.13:6379@16379 master - 0 1794629989140 3 connected 10923-16383
+4c4df7f3191d48bf20660691e0c89aaccf6458f0 172.30.0.11:6379@16379 myself,master - 0 0 1 connected 0-5460
+1a83930b60f85e9c2d5810417a44e38225d3c8f0 172.30.0.14:6379@16379 slave 38fe79c424a135a061290d5cd9ed389cbcc18609 0 1794629989000 3 connected
+djsan@PC-DARWIN [13/11/2026 23:19:50] >
+PS>docker exec redis-1 redis-cli -c GET usuario:25
+
+djsan@PC-DARWIN [13/11/2026 23:20:03] >
+PS>docker start redis-2
+redis-2
+djsan@PC-DARWIN [13/11/2026 23:20:54] >
+PS>Start-Sleep -Seconds 10
+djsan@PC-DARWIN [13/11/2026 23:21:12] >
+PS>docker exec redis-1 redis-cli cluster nodes
+1a83930b60f85e9c2d5810417a44e38225d3c8f0 172.30.0.14:6379@16379 slave 38fe79c424a135a061290d5cd9ed389
+cbcc18609 0 1794630084816 3 connected
+djsan@PC-DARWIN [13/11/2026 23:21:25] >
+PS>Stop-Transcript
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261113232152
+**********************
