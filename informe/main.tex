@@ -22,7 +22,7 @@
 
 % ---------- Tablas, figuras y código ----------
 \usepackage{graphicx}
-\graphicspath{{../figuras/}{../capturas/sistema/}{../capturas/lecturas/}}
+\graphicspath{{../figuras/}{../capturas/sistema/}{../capturas/lecturas/}{../capturas/entorno/}}
 \usepackage{float}
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -656,15 +656,275 @@ probó una partición de red, sino solo la caída de un nodo.
 
 \subsection{Ejemplos en mi propio entorno}
 
-PENDIENTE
+Además del clúster Redis, se analizaron dos situaciones de mi entorno
+cotidiano en las que aparecen los mismos conceptos de la Unidad~1. Ambas se
+realizaron el 14 de noviembre de 2026 en el mismo equipo
+(\texttt{PC-DARWIN}); las capturas muestran la fecha y la hora en la barra de
+tareas o en el indicador de la consola.
+
+\subsubsection*{Ejemplo 1: Git y GitHub como sistema replicado}
+
+Mi repositorio del proyecto existe en dos lugares: la copia local en mi
+equipo y la copia remota en GitHub. Ambas son \emph{réplicas} de los mismos
+datos que se sincronizan de forma asíncrona y manual (\emph{push} y
+\emph{fetch}), sin coordinación en cada cambio. Para comprobar qué ocurre
+cuando las dos réplicas se modifican a la vez, se editó la misma línea de
+\texttt{README.md} en GitHub (web) y en el equipo local, se hizo un commit en
+cada lado y luego se intentó sincronizar.
+
+\begin{enumerate}
+  \item Al intentar el \emph{push}, GitHub Desktop lo rechazó porque el
+  remoto tenía commits que la copia local no conocía
+  (Figura~\ref{fig:git1}).
+  \item Al traer esos cambios apareció un \textbf{conflicto} en
+  \texttt{README.md}: Git mostró las dos versiones de la misma línea y no
+  eligió ninguna por sí mismo (Figura~\ref{fig:git2}).
+  \item El conflicto se resolvió a mano, dejando el contenido definitivo del
+  README, y se creó un commit de \emph{merge} que une las dos historias
+  (Figura~\ref{fig:git3}).
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{01-git-push-rechazado.png}
+  \caption{GitHub Desktop rechaza el \emph{push} porque las réplicas local y
+  remota divergieron. Captura propia.}
+  \label{fig:git1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{02-git-conflicto.png}
+  \caption{Conflicto en \texttt{README.md}: la versión local
+  (\texttt{HEAD}) y la remota sobre la misma línea. Captura propia.}
+  \label{fig:git2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{03-git-merge-resuelto.png}
+  \caption{Commit de \emph{merge} con el conflicto resuelto. Captura propia.}
+  \label{fig:git3}
+\end{figure}
+
+\textbf{Análisis.} Git prioriza la disponibilidad: se puede hacer commit sin
+conexión y sin consultar a la otra réplica, lo que equivale a aceptar
+escrituras durante una partición (AP). El precio es que las réplicas pueden
+divergir. La diferencia con Redis Cluster está en cómo se resuelve esa
+divergencia. Cuando el maestro caído del experimento E1 volvió, Redis impuso
+la configuración con la época más alta y lo convirtió en réplica, por lo que
+cualquier escritura que solo tuviera el nodo antiguo se habría descartado sin
+avisar. Git, en cambio, conserva las dos versiones y obliga a una persona a
+decidir. Ninguna de las dos estrategias es mejor en abstracto: Redis
+necesita resolver automáticamente y en segundos, mientras que en un
+repositorio de código perder un cambio en silencio sería inaceptable. Además,
+Git no ofrece transparencia de replicación: el usuario sabe que existen dos
+copias y debe sincronizarlas de forma explícita.
+
+\subsubsection*{Ejemplo 2: acceso al sitio web de la UTEQ}
+
+Desde PowerShell se resolvió el nombre \texttt{www.uteq.edu.ec} con
+\texttt{Resolve-DnsName} y se realizaron peticiones HTTP con
+\texttt{Invoke-WebRequest}: primero con red, después con el Wi-Fi
+desconectado y, por último, tras reconectarlo. La sesión se grabó con
+\texttt{Start-Transcript}
+(\texttt{experimento/salidas/ejemplo2-servicio-web.txt}). La
+Tabla~\ref{tab:ej2} resume los resultados.
+
+\begin{table}[H]
+  \centering
+  \caption{Resultados del ejemplo 2 (14/11/2026).}
+  \label{tab:ej2}
+  \small
+  \begin{tabularx}{\linewidth}{l l X}
+    \toprule
+    \textbf{Hora} & \textbf{Situación} & \textbf{Resultado} \\
+    \midrule
+    09:40 & Con red & DNS: \texttt{www.uteq.edu.ec} $\rightarrow$
+      190.15.141.211 (TTL 2529\,s). HTTP \texttt{200} en 440.85\,ms. \\
+    09:40--09:42 & Sin red & DNS: tiempo de espera agotado. HTTP: primero
+      ``No es posible conectar con el servidor remoto'' y después ``No se
+      puede resolver el nombre remoto'', con un fallo en 77.79\,ms. \\
+    09:42 & Red recuperada & HTTP \texttt{200}. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{04-web-con-red.png}
+  \caption{Resolución DNS y petición HTTP con red. Captura propia.}
+  \label{fig:web1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{05-web-sin-red.png}
+  \caption{Las mismas operaciones sin red. Captura propia.}
+  \label{fig:web2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{06-web-red-recuperada.png}
+  \caption{La petición vuelve a responder al reconectar. Captura propia.}
+  \label{fig:web3}
+\end{figure}
+
+\textbf{Análisis.}
+\begin{itemize}
+  \item \textbf{Transparencia de ubicación.} El DNS permite usar un nombre
+  sin conocer la dirección del servidor, igual que un cliente de Redis
+  Cluster usa una clave sin saber en qué nodo está. La diferencia es que en
+  Redis la ubicación se corrige en cada petición mediante \texttt{MOVED},
+  mientras que la respuesta del DNS se guarda en caché durante su TTL (unos
+  42 minutos en este caso). Si el servidor cambiara de dirección, los
+  clientes podrían seguir usando la anterior hasta que expire: una forma de
+  consistencia eventual.
+  \item \textbf{Comunicación síncrona y ausencia de transparencia de
+  fallos.} \texttt{Invoke-WebRequest} sigue el modelo petición--respuesta:
+  el cliente espera la respuesta del servidor y, si no hay red, solo puede
+  devolver un error. El fallo se notificó en 77.79\,ms, incluso más rápido
+  que una respuesta normal, y llegó directamente al usuario sin que nada lo
+  ocultara.
+  \item \textbf{Un dato desactualizado.} Sin red, después del error la
+  consola volvió a mostrar \texttt{200}
+  (Figura~\ref{fig:web2}). No era una respuesta nueva: la variable
+  \texttt{\$r} conservaba el resultado de la petición anterior, porque la
+  petición fallida no la sobrescribió. El cliente siguió mostrando el último
+  valor conocido aunque el servidor ya no era alcanzable, que es exactamente
+  el riesgo de un sistema AP: responder con datos que pueden estar
+  desactualizados sin indicarlo.
+\end{itemize}
 
 % =====================================================================
 \section{Comparación con Hazelcast}
 \label{sec:comparacion}
 % =====================================================================
 
-PENDIENTE
+Hazelcast es una plataforma de datos en memoria escrita en Java que ofrece
+estructuras de datos distribuidas (mapas, colas, contadores, etc.) y, en su
+versión actual, procesamiento de flujos (Hazelcast Jet)
+\cite{gencer2021hazelcastjet}. A diferencia de Redis Cluster, no se desplegó
+en este trabajo: la comparación es \emph{documental} y se basa en la
+documentación oficial de la versión 5.5 y en la bibliografía citada. La
+Tabla~\ref{tab:comparacion} resume las diferencias según los conceptos de la
+Unidad~1.
 
+\begin{table}[H]
+  \centering
+  \caption{Comparación entre Redis Cluster y Hazelcast.}
+  \label{tab:comparacion}
+  \footnotesize
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabularx}{\linewidth}{>{\bfseries\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
+    \toprule
+    \textbf{Criterio} & \textbf{Redis Cluster} & \textbf{Hazelcast} \\
+    \midrule
+    Particionamiento &
+      16\,384 \emph{hash slots}; slot $=\mathrm{CRC16}(\mathit{clave}) \bmod 16384$
+      \cite{redis2026clusterspec}. &
+      271 particiones por defecto; partición = hash de la clave serializada
+      módulo el número de particiones \cite{hazelcast2026partitioning}. \\
+    Coordinación &
+      Sin nodo coordinador: la configuración se propaga por \emph{gossip} en
+      el bus del clúster \cite{redis2026clusterspec}. &
+      El miembro más antiguo (\emph{master member}) crea y distribuye la tabla
+      de particiones; si falla, lo sustituye el siguiente más antiguo
+      \cite{hazelcast2026partitioning}. \\
+    Replicación &
+      Una o más réplicas dedicadas por maestro, actualizadas de forma
+      asíncrona \cite{redis2026replication}. &
+      Copias de respaldo de cada partición en otros miembros; por defecto 1
+      \emph{backup} síncrono, que bloquea la operación hasta su confirmación
+      (máx.\ 6) \cite{hazelcast2026backups}. \\
+    Consistencia (CAP/PACELC) &
+      PA/EL: prioriza disponibilidad y latencia; puede perder escrituras
+      confirmadas. &
+      Estructuras AP con consistencia de ``mejor esfuerzo''
+      \cite{hazelcast2026replicationalgorithm}, clasificadas como PA/EC
+      \cite{abadi2017hazelcast}. El CP Subsystem ofrece consistencia fuerte
+      con Raft \cite{hazelcast2026cpsubsystem}. \\
+    Detección de fallos y recuperación &
+      \texttt{PFAIL} $\rightarrow$ \texttt{FAIL} por mayoría tras
+      \texttt{cluster-node-timeout}; votación y promoción de una réplica con
+      nueva \emph{configEpoch} \cite{redis2026clusterspec}. &
+      Detectores basados en \emph{heartbeats}; la exclusión de un miembro
+      tarda de segundos a decenas de segundos \cite{hazelcast2026splitbrain}.
+      Se promueve un \emph{backup} a primario y un proceso
+      \emph{anti-entropy} repara copias desactualizadas
+      \cite{hazelcast2026replicationalgorithm}. \\
+    Particiones de red (\emph{split-brain}) &
+      Un maestro en minoría deja de aceptar escrituras tras
+      \texttt{cluster-node-timeout} \cite{redis2026clusterspec}. &
+      Protección \emph{split-brain} configurable: un tamaño mínimo de
+      clúster por estructura de datos, con una ventana en la que las
+      operaciones aún pueden tener éxito \cite{hazelcast2026splitbrain}. \\
+    Topología y acceso &
+      Proceso servidor independiente; el cliente se conecta a cualquier nodo
+      y sigue las redirecciones \texttt{MOVED}/\texttt{ASK}. &
+      Embebida (la aplicación Java es miembro del clúster) o
+      cliente--servidor con clientes en Java, C++, C\#, Go, Node.js, Python y
+      REST \cite{hazelcast2026topology}. \\
+    Edición y licencia &
+      Redis~8 disponible con licencia AGPLv3 \cite{trollope2025agpl}. &
+      El CP Subsystem requiere Hazelcast Enterprise en la versión 5.5 y viene
+      desactivado por defecto \cite{hazelcast2026cpsubsystem}. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Discusión}
+
+\textbf{Dos formas de repartir los datos.} Ambos sistemas usan un número
+fijo de particiones y una función hash, lo que permite mover particiones
+completas al añadir o quitar nodos sin redistribuir clave por clave. La
+diferencia está en quién decide la asignación. En Redis Cluster no hay
+coordinador: cada nodo difunde lo que sabe y los conflictos se resuelven con
+la época de configuración. En Hazelcast, un miembro concreto (el más antiguo)
+mantiene la tabla de particiones y la envía a los demás. El enfoque de Redis
+elimina un punto especial del sistema; el de Hazelcast simplifica las
+decisiones, a costa de depender de ese miembro y de su sustitución si falla.
+
+\textbf{Latencia frente a consistencia en funcionamiento normal (la ``E'' de
+PACELC).} Es la diferencia más importante. Redis confirma la escritura en
+cuanto el maestro la aplica y replica después; Hazelcast, por defecto, espera
+la confirmación de un \emph{backup} síncrono antes de devolver el control.
+Por eso, sin fallos, Hazelcast pierde menos datos ante la caída de un nodo, a
+cambio de añadir a cada escritura el tiempo de ida y vuelta hasta otro
+miembro. Aun así, Hazelcast tampoco ofrece consistencia fuerte en sus
+estructuras AP: su replicación es ``perezosa'' y, si el primario cae con
+cambios aún no replicados, se pueden perder \cite{hazelcast2026replicationalgorithm}.
+Abadi lo clasifica como PA/EC, pero advierte que es una categoría confusa,
+porque la aplicación tiene que tolerar inconsistencias de todas formas
+\cite{abadi2017hazelcast}.
+
+\textbf{Comportamiento ante particiones (la ``PA'').} Los dos sistemas
+prefieren seguir disponibles durante una partición y limitan el daño solo
+después de un tiempo: Redis cuando vence \texttt{cluster-node-timeout} y
+Hazelcast cuando se activa su protección \emph{split-brain}, que además hay
+que configurar explícitamente. En ambos existe una ventana en la que dos
+partes del clúster pueden aceptar escrituras distintas.
+
+\textbf{Consistencia fuerte como opción.} Hazelcast ofrece algo que Redis
+Cluster no tiene: el CP Subsystem, que usa Raft y solo confirma una operación
+cuando la mayoría de los miembros CP la ha replicado
+\cite{hazelcast2026cpsubsystem}. Esto permite usar en el mismo clúster
+estructuras AP para datos rápidos y estructuras CP (cerrojos, contadores) para
+coordinación crítica. Sin embargo, en la versión 5.5 esta función requiere la
+edición Enterprise, mientras que Redis~8 se distribuye completo con licencia
+AGPLv3. Para un proyecto que necesite consistencia fuerte sin licencias
+comerciales, ninguno de los dos sería la opción adecuada.
+
+\textbf{Síntesis.} Redis Cluster es la opción más simple y de menor latencia
+cuando los datos se pueden reconstruir (caché, sesiones, contadores
+aproximados). Hazelcast se ajusta mejor a aplicaciones Java que necesitan
+mayor durabilidad por defecto, procesamiento distribuido junto a los datos o,
+con la edición Enterprise, estructuras con consistencia fuerte. Ambos son
+sistemas AP en sus estructuras principales, por lo que ninguno sustituye a
+una base de datos transaccional para datos críticos.
+
+% =====================================================================
 % =====================================================================
 \section{Postura crítica}
 \label{sec:postura}
@@ -770,8 +1030,8 @@ siguientes tareas:
   lo construí yo en draw.io, y el esquema del Anexo~A lo dibujé a mano.
   \item \textbf{Redacción:} apoyo en la documentación del experimento E1 y su
   interpretación, y en la redacción de la introducción, la arquitectura, el
-  análisis de la Unidad~1, la experimentación y la postura crítica de este
-  informe.
+  análisis de la Unidad~1, la experimentación, los ejemplos de mi propio
+  entorno, la comparación con Hazelcast y la postura crítica de este informe.
 \end{itemize}
 
 Todo el contenido fue revisado por el autor, quien asume la responsabilidad
